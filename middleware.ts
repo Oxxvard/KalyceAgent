@@ -12,6 +12,9 @@ export async function middleware(request: NextRequest) {
   const { response, user, role } = await updateSession(request);
   const { pathname } = request.nextUrl;
 
+  // Server Actions POST — never redirect, just refresh the session cookie
+  if (request.headers.get("next-action")) return response;
+
   if (!user) {
     if (isPublic(pathname)) return response;
     const redirect = request.nextUrl.clone();
