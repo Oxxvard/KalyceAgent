@@ -1,6 +1,3 @@
-// Placeholder types — à régénérer via `npm run db:gen-types` une fois Supabase démarré.
-// Ces types minimalistes permettent au projet de compiler avant la 1ère génération.
-
 export type Json =
   | string
   | number
@@ -19,40 +16,103 @@ export type DocumentCategory =
   | "operations"
   | "other";
 
-export interface Database {
+type ProfilesRow = {
+  id: string;
+  role: UserRole;
+  organization_id: string | null;
+  full_name: string | null;
+  email: string;
+  created_at: string;
+  updated_at: string;
+};
+
+type OrganizationsRow = {
+  id: string;
+  name: string;
+  sector: string | null;
+  current_stage: OrgStage;
+  target_stage: OrgStage;
+  founded_year: number | null;
+  consultant_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type GrowthMetricsRow = {
+  id: string;
+  organization_id: string;
+  period_start: string;
+  period_end: string;
+  revenue: number | null;
+  cac: number | null;
+  ltv: number | null;
+  fte: number | null;
+  gross_margin_pct: number | null;
+  notes: string | null;
+  created_at: string;
+};
+
+type ChecklistTemplatesRow = {
+  id: string;
+  stage: OrgStage;
+  position: number;
+  title: string;
+  description: string | null;
+  weight: number;
+};
+
+type ChecklistsRow = {
+  id: string;
+  organization_id: string;
+  template_id: string;
+  status: ChecklistStatus;
+  validated_at: string | null;
+  validated_by: string | null;
+  notes: string | null;
+};
+
+type DocumentsRow = {
+  id: string;
+  organization_id: string;
+  category: DocumentCategory;
+  name: string;
+  storage_path: string;
+  mime_type: string | null;
+  size_bytes: number | null;
+  uploaded_by: string | null;
+  created_at: string;
+};
+
+type ScalabilityScoresRow = {
+  id: string;
+  organization_id: string;
+  score: number;
+  breakdown: Json;
+  computed_at: string;
+};
+
+export type Database = {
+  __InternalSupabase: {
+    PostgrestVersion: "12";
+  };
   public: {
     Tables: {
       profiles: {
-        Row: {
-          id: string;
-          role: UserRole;
-          organization_id: string | null;
-          full_name: string | null;
-          email: string;
-          created_at: string;
-          updated_at: string;
-        };
+        Row: ProfilesRow;
         Insert: {
           id: string;
           role?: UserRole;
           organization_id?: string | null;
           full_name?: string | null;
           email: string;
+          created_at?: string;
+          updated_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["profiles"]["Insert"]>;
+        Update: Partial<ProfilesRow>;
+        Relationships: [];
       };
       organizations: {
-        Row: {
-          id: string;
-          name: string;
-          sector: string | null;
-          current_stage: OrgStage;
-          target_stage: OrgStage;
-          founded_year: number | null;
-          consultant_id: string | null;
-          created_at: string;
-          updated_at: string;
-        };
+        Row: OrganizationsRow;
         Insert: {
           id?: string;
           name: string;
@@ -61,92 +121,96 @@ export interface Database {
           target_stage?: OrgStage;
           founded_year?: number | null;
           consultant_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
         };
-        Update: Partial<Database["public"]["Tables"]["organizations"]["Insert"]>;
+        Update: Partial<OrganizationsRow>;
+        Relationships: [];
       };
       growth_metrics: {
-        Row: {
-          id: string;
+        Row: GrowthMetricsRow;
+        Insert: {
+          id?: string;
           organization_id: string;
           period_start: string;
           period_end: string;
-          revenue: number | null;
-          cac: number | null;
-          ltv: number | null;
-          fte: number | null;
-          gross_margin_pct: number | null;
-          notes: string | null;
-          created_at: string;
+          revenue?: number | null;
+          cac?: number | null;
+          ltv?: number | null;
+          fte?: number | null;
+          gross_margin_pct?: number | null;
+          notes?: string | null;
+          created_at?: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["growth_metrics"]["Row"], "id" | "created_at"> & {
-          id?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["growth_metrics"]["Insert"]>;
+        Update: Partial<GrowthMetricsRow>;
+        Relationships: [];
       };
       checklist_templates: {
-        Row: {
-          id: string;
+        Row: ChecklistTemplatesRow;
+        Insert: {
+          id?: string;
           stage: OrgStage;
           position: number;
           title: string;
-          description: string | null;
-          weight: number;
+          description?: string | null;
+          weight?: number;
         };
-        Insert: Omit<Database["public"]["Tables"]["checklist_templates"]["Row"], "id"> & {
-          id?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["checklist_templates"]["Insert"]>;
+        Update: Partial<ChecklistTemplatesRow>;
+        Relationships: [];
       };
       checklists: {
-        Row: {
-          id: string;
+        Row: ChecklistsRow;
+        Insert: {
+          id?: string;
           organization_id: string;
           template_id: string;
-          status: ChecklistStatus;
-          validated_at: string | null;
-          validated_by: string | null;
-          notes: string | null;
+          status?: ChecklistStatus;
+          validated_at?: string | null;
+          validated_by?: string | null;
+          notes?: string | null;
         };
-        Insert: Omit<Database["public"]["Tables"]["checklists"]["Row"], "id"> & {
-          id?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["checklists"]["Insert"]>;
+        Update: Partial<ChecklistsRow>;
+        Relationships: [];
       };
       documents: {
-        Row: {
-          id: string;
+        Row: DocumentsRow;
+        Insert: {
+          id?: string;
           organization_id: string;
-          category: DocumentCategory;
+          category?: DocumentCategory;
           name: string;
           storage_path: string;
-          mime_type: string | null;
-          size_bytes: number | null;
-          uploaded_by: string | null;
-          created_at: string;
+          mime_type?: string | null;
+          size_bytes?: number | null;
+          uploaded_by?: string | null;
+          created_at?: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["documents"]["Row"], "id" | "created_at"> & {
-          id?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["documents"]["Insert"]>;
+        Update: Partial<DocumentsRow>;
+        Relationships: [];
       };
       scalability_scores: {
-        Row: {
-          id: string;
+        Row: ScalabilityScoresRow;
+        Insert: {
+          id?: string;
           organization_id: string;
           score: number;
           breakdown: Json;
-          computed_at: string;
+          computed_at?: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["scalability_scores"]["Row"], "id" | "computed_at"> & {
-          id?: string;
-        };
-        Update: Partial<Database["public"]["Tables"]["scalability_scores"]["Insert"]>;
+        Update: Partial<ScalabilityScoresRow>;
+        Relationships: [];
       };
     };
     Views: Record<string, never>;
     Functions: {
-      current_role: { Args: Record<string, never>; Returns: UserRole };
-      current_org_id: { Args: Record<string, never>; Returns: string | null };
+      current_role: {
+        Args: Record<string, never>;
+        Returns: UserRole;
+      };
+      current_org_id: {
+        Args: Record<string, never>;
+        Returns: string | null;
+      };
     };
     Enums: {
       user_role: UserRole;
@@ -154,5 +218,6 @@ export interface Database {
       checklist_status: ChecklistStatus;
       document_category: DocumentCategory;
     };
+    CompositeTypes: Record<string, never>;
   };
-}
+};

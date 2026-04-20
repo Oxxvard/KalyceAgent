@@ -15,13 +15,13 @@
     "db:gen-types": "supabase gen types typescript --local > types/database.ts"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.45.4",
+    "@supabase/ssr": "^0.7.0",
+    "@supabase/supabase-js": "^2.103.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.453.0",
-    "next": "15.0.3",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "next": "^15.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "recharts": "^2.13.0",
     "tailwind-merge": "^2.5.4"
   },
