@@ -4,7 +4,7 @@ export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInp
   return (
     <input
       className={cn(
-        "h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-midnight placeholder:text-slate-400 focus:border-midnight focus:outline-none focus:ring-2 focus:ring-midnight/20 disabled:bg-slate-50",
+        "h-10 w-full rounded-lg border border-line bg-ink-soft px-3.5 text-sm text-white placeholder:text-muted outline-none transition-colors focus:border-gold/60 disabled:opacity-60",
         className,
       )}
       {...props}
@@ -15,7 +15,10 @@ export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInp
 export function Label({ className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
-      className={cn("mb-1 block text-xs font-medium uppercase tracking-wide text-slate-deep/70", className)}
+      className={cn(
+        "mb-1.5 block text-[11px] font-medium uppercase tracking-[0.07em] text-muted",
+        className,
+      )}
       {...props}
     />
   );
@@ -25,7 +28,7 @@ export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<H
   return (
     <textarea
       className={cn(
-        "min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-midnight placeholder:text-slate-400 focus:border-midnight focus:outline-none focus:ring-2 focus:ring-midnight/20",
+        "min-h-[88px] w-full rounded-lg border border-line bg-ink-soft px-3.5 py-2.5 text-sm text-white placeholder:text-muted outline-none transition-colors focus:border-gold/60",
         className,
       )}
       {...props}
@@ -37,7 +40,7 @@ export function Select({ className, ...props }: React.SelectHTMLAttributes<HTMLS
   return (
     <select
       className={cn(
-        "h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-midnight focus:border-midnight focus:outline-none focus:ring-2 focus:ring-midnight/20",
+        "h-10 w-full rounded-lg border border-line bg-ink-soft px-3.5 text-sm text-white outline-none transition-colors focus:border-gold/60",
         className,
       )}
       {...props}

@@ -9,34 +9,48 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        midnight: {
-          DEFAULT: "#0B1E3F",
-          50: "#E6EAF1",
-          100: "#C2CCDC",
-          200: "#8A9CBA",
-          300: "#536C97",
-          400: "#2C4674",
-          500: "#0B1E3F",
-          600: "#091932",
-          700: "#071326",
-          800: "#040D1A",
-          900: "#02060D",
+        ink: {
+          DEFAULT: "#0b0f10",
+          soft: "#101416",
+          mauve: "#16191b",
+          deep: "#070a0b",
         },
-        slate: {
-          deep: "#334155",
-          soft: "#F1F5F9",
+        line: {
+          DEFAULT: "rgba(255,255,255,0.08)",
+          strong: "rgba(255,255,255,0.16)",
         },
-        accent: {
-          emerald: "#10B981",
-          amber: "#F59E0B",
-          rose: "#F43F5E",
+        surface: {
+          DEFAULT: "rgba(255,255,255,0.04)",
+          raised: "rgba(255,255,255,0.06)",
+          hover: "rgba(255,255,255,0.07)",
         },
+        gold: {
+          DEFAULT: "#e6c488",
+          deep: "#a87a3e",
+          soft: "#f4dfb6",
+        },
+        ember: {
+          DEFAULT: "#e8724a",
+          soft: "#f5a882",
+        },
+        muted: "#8b8778",
+        textL: "#d1d5db",
+        success: "#6ee7b7",
+        warn: "#f5a882",
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-playfair)", "Playfair Display", "Georgia", "serif"],
       },
       boxShadow: {
-        card: "0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px 0 rgba(15, 23, 42, 0.04)",
+        card: "0 1px 3px 0 rgba(0,0,0,0.35), 0 1px 2px 0 rgba(0,0,0,0.20)",
+        glow: "0 8px 40px rgba(0,0,0,0.6)",
+      },
+      backgroundImage: {
+        "gold-grad": "linear-gradient(135deg, #e6c488, #a87a3e)",
+        "gold-ember": "linear-gradient(135deg, #e6c488, #e8724a)",
+        "score-aura":
+          "linear-gradient(135deg, rgba(230,196,136,0.12) 0%, rgba(232,114,74,0.08) 100%)",
       },
     },
   },

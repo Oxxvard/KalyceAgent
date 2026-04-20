@@ -19,8 +19,8 @@ export default async function ClientRoadmapPage() {
 
   if (!profile?.organization_id) {
     return (
-      <div className="mx-auto max-w-3xl px-6 py-20 text-center">
-        <p className="text-slate-deep/80">Aucune organisation associée pour l'instant.</p>
+      <div className="py-24 text-center text-[14px] text-muted">
+        Aucune organisation associée pour l&apos;instant.
       </div>
     );
   }
@@ -28,14 +28,18 @@ export default async function ClientRoadmapPage() {
   const items = await loadRoadmap(supabase, profile.organization_id);
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
-      <header className="mb-8">
-        <h1 className="text-2xl font-semibold text-midnight">Roadmap de croissance</h1>
-        <p className="mt-1 text-sm text-slate-deep/80">
+    <div>
+      <div className="mb-6">
+        <h1 className="font-display text-[26px] font-bold text-white">Roadmap de croissance</h1>
+        <p className="mt-1 text-[13px] text-muted">
           Local → National → International. Votre consultant valide chaque étape avec vous.
         </p>
-      </header>
-      <RoadmapView items={items} organizationId={profile.organization_id} interactive={false} />
+      </div>
+      <RoadmapView
+        items={items}
+        organizationId={profile.organization_id}
+        interactive={false}
+      />
     </div>
   );
 }

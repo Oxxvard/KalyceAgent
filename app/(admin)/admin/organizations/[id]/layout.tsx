@@ -6,6 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { TabsNav } from "@/components/shell/tabs";
 import { createClient } from "@/lib/supabase/server";
 
+const STAGE_LABEL: Record<string, string> = {
+  local: "Local",
+  national: "National",
+  international: "International",
+};
+
 export default async function OrgDetailLayout({
   children,
   params,
@@ -30,24 +36,39 @@ export default async function OrgDetailLayout({
     { href: `/admin/organizations/${id}/documents`, label: "Documents" },
   ];
 
+  const badgeTone =
+    org.current_stage === "international"
+      ? "ember"
+      : org.current_stage === "national"
+      ? "gold"
+      : "muted";
+
   return (
-    <div className="mx-auto max-w-6xl px-8 py-10">
+    <div className="p-8">
       <Link
         href="/admin/organizations"
-        className="mb-4 inline-flex items-center gap-1 text-sm text-slate-deep/70 hover:text-midnight"
+        className="mb-5 inline-flex items-center gap-1.5 text-[12px] text-muted hover:text-white"
       >
-        <ArrowLeft className="h-4 w-4" /> Clients
+        <ArrowLeft size={13} strokeWidth={1.6} /> Clients
       </Link>
       <header className="mb-6">
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold text-midnight">{org.name}</h1>
-          <Badge tone="midnight">{org.current_stage}</Badge>
-          <Badge>→ {org.target_stage}</Badge>
+        <div className="flex flex-wrap items-center gap-3 mb-1">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gold">
+            {org.sector ?? "PME"}
+          </div>
         </div>
-        {org.sector && <p className="mt-1 text-sm text-slate-deep/70">{org.sector}</p>}
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="font-display text-[28px] font-bold text-white">{org.name}</h1>
+          <Badge tone={badgeTone as "gold" | "ember" | "muted"}>
+            {STAGE_LABEL[org.current_stage] ?? org.current_stage}
+          </Badge>
+          <span className="text-[12px] text-muted">
+            → {STAGE_LABEL[org.target_stage] ?? org.target_stage}
+          </span>
+        </div>
       </header>
       <TabsNav tabs={tabs} />
-      <div className="mt-8">{children}</div>
+      <div className="mt-7">{children}</div>
     </div>
   );
 }

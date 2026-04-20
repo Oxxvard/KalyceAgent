@@ -1,11 +1,18 @@
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 
 import { MetricForm } from "./metric-form";
 
-const EUR = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+const EUR = new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
 
-export default async function OrgMetricsPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function OrgMetricsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const supabase = await createClient();
 
@@ -17,51 +24,68 @@ export default async function OrgMetricsPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Nouvelle période</CardTitle>
-        </CardHeader>
+      <div className="rounded-xl border border-line bg-surface p-5">
+        <div className="mb-4 text-[13px] font-semibold text-white">Nouvelle période</div>
         <MetricForm organizationId={id} />
-      </Card>
+      </div>
 
-      <Card className="p-0">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-soft text-xs uppercase tracking-wide text-slate-deep/70">
-            <tr>
-              <th className="px-6 py-3 font-medium">Période</th>
-              <th className="px-6 py-3 font-medium">CA</th>
-              <th className="px-6 py-3 font-medium">CAC</th>
-              <th className="px-6 py-3 font-medium">LTV</th>
-              <th className="px-6 py-3 font-medium">ETP</th>
-              <th className="px-6 py-3 font-medium">Marge</th>
+      <div className="rounded-xl border border-line overflow-hidden">
+        <div className="border-b border-line px-5 py-3.5">
+          <span className="text-[13px] font-semibold text-white">Historique</span>
+        </div>
+        <table className="w-full border-collapse">
+          <thead>
+            <tr style={{ background: "rgba(255,255,255,0.02)" }}>
+              {["Période", "CA", "CAC", "LTV", "ETP", "Marge"].map((h) => (
+                <th
+                  key={h}
+                  className="px-5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.05em] text-muted"
+                >
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody>
             {metrics?.map((m) => (
-              <tr key={m.id}>
-                <td className="px-6 py-3">
+              <tr
+                key={m.id}
+                className="border-t border-line transition-colors hover:bg-surface-raised"
+              >
+                <td className="px-5 py-3 text-[12px] text-textL">
                   {new Date(m.period_start).toLocaleDateString("fr-FR")} –{" "}
                   {new Date(m.period_end).toLocaleDateString("fr-FR")}
                 </td>
-                <td className="px-6 py-3">{m.revenue ? EUR.format(Number(m.revenue)) : "—"}</td>
-                <td className="px-6 py-3">{m.cac ? EUR.format(Number(m.cac)) : "—"}</td>
-                <td className="px-6 py-3">{m.ltv ? EUR.format(Number(m.ltv)) : "—"}</td>
-                <td className="px-6 py-3">{m.fte ?? "—"}</td>
-                <td className="px-6 py-3">
-                  {m.gross_margin_pct != null ? `${Number(m.gross_margin_pct).toFixed(1)}%` : "—"}
+                <td className="px-5 py-3 text-[13px] font-medium text-gold">
+                  {m.revenue ? EUR.format(Number(m.revenue)) : "—"}
+                </td>
+                <td className="px-5 py-3 text-[12px] text-textL">
+                  {m.cac ? EUR.format(Number(m.cac)) : "—"}
+                </td>
+                <td className="px-5 py-3 text-[12px] text-textL">
+                  {m.ltv ? EUR.format(Number(m.ltv)) : "—"}
+                </td>
+                <td className="px-5 py-3 text-[12px] text-textL">{m.fte ?? "—"}</td>
+                <td className="px-5 py-3 text-[12px] text-textL">
+                  {m.gross_margin_pct != null
+                    ? `${Number(m.gross_margin_pct).toFixed(1)}%`
+                    : "—"}
                 </td>
               </tr>
             ))}
             {!metrics?.length && (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-sm text-slate-deep/60">
+                <td
+                  colSpan={6}
+                  className="px-5 py-10 text-center text-[13px] text-muted"
+                >
                   Aucune métrique enregistrée.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-      </Card>
+      </div>
     </div>
   );
 }

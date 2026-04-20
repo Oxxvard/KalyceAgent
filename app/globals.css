@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --color-bg: #f1f5f9;
-  --color-fg: #0b1e3f;
+  --color-bg: #0b0f10;
+  --color-fg: #ffffff;
 }
 
 html,
@@ -16,4 +16,76 @@ body {
   background-color: var(--color-bg);
   color: var(--color-fg);
   font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f2426;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3033;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #e6c488;
+  cursor: pointer;
+  border: 2px solid #0b0f10;
+}
+input[type="range"]::-moz-range-thumb {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #e6c488;
+  cursor: pointer;
+  border: 2px solid #0b0f10;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-line bg-surface;
+  }
+  .card-hover {
+    @apply transition-colors hover:bg-surface-hover hover:border-gold/30;
+  }
+  .h-display {
+    @apply font-display tracking-tight text-white;
+  }
+  .pill {
+    @apply inline-flex items-center rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-gold-soft disabled:opacity-50;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 py-2 text-sm text-textL transition-colors hover:bg-surface-hover hover:border-line-strong disabled:opacity-50;
+  }
+  .input-dark {
+    @apply w-full rounded-lg border border-line bg-ink-soft px-3.5 py-2.5 text-sm text-white outline-none transition-colors placeholder:text-muted focus:border-gold/60;
+  }
+  .label-tiny {
+    @apply text-[10px] font-semibold uppercase tracking-[0.07em] text-muted;
+  }
+  .section-title {
+    @apply text-[11px] font-semibold uppercase tracking-[0.1em] text-gold;
+  }
 }

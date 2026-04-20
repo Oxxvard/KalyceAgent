@@ -1,8 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { updateChecklistStatus } from "@/app/actions/organizations";
 
 type Status = "pending" | "in_progress" | "done" | "skipped";
@@ -19,13 +18,6 @@ function nextStatus(current: Status): Status {
       return "pending";
   }
 }
-
-const LABELS: Record<Status, string> = {
-  pending: "Démarrer",
-  in_progress: "Valider",
-  done: "Réinitialiser",
-  skipped: "Réactiver",
-};
 
 export function StageActionForm({
   checklistId,
@@ -46,21 +38,24 @@ export function StageActionForm({
     startTransition(() => updateChecklistStatus(fd));
   };
 
+  const isDone = status === "done";
+  const isActive = status === "in_progress";
+
   return (
-    <div className="flex flex-col gap-2">
-      <Button
-        size="sm"
-        variant={status === "done" ? "secondary" : "primary"}
-        disabled={pending}
-        onClick={() => handle(nextStatus(status))}
-      >
-        {LABELS[status]}
-      </Button>
-      {status !== "skipped" && status !== "done" && (
-        <Button size="sm" variant="ghost" disabled={pending} onClick={() => handle("skipped")}>
-          Ignorer
-        </Button>
+    <button
+      disabled={pending}
+      onClick={() => handle(nextStatus(status))}
+      className={cn(
+        "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 text-[10px] font-bold transition-all",
+        isDone
+          ? "border-success bg-success text-ink"
+          : isActive
+          ? "border-gold"
+          : "border-line/50 hover:border-gold/50",
+        pending && "opacity-50 cursor-wait",
       )}
-    </div>
+    >
+      {isDone && "✓"}
+    </button>
   );
 }

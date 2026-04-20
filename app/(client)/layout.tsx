@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
-import { FileText, LayoutDashboard, ListChecks, LogOut, TrendingUp } from "lucide-react";
+import { Bell, FileText, LayoutDashboard, ListChecks, LogOut } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { KalyceLogo } from "@/components/shell/kalyce-logo";
 import { TopNavLink } from "@/components/shell/topnav-link";
 import { signOut } from "@/app/actions/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -22,35 +22,60 @@ export default async function ClientLayout({ children }: { children: React.React
   if (profile?.role !== "client") redirect("/admin");
 
   const orgName = (profile?.organization as unknown as { name: string } | null)?.name ?? "";
+  const initial =
+    (profile?.full_name?.trim()?.[0] ?? user.email?.[0] ?? "K").toUpperCase();
 
   return (
-    <div className="min-h-screen bg-slate-soft">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <div className="flex min-h-screen flex-col bg-ink">
+      <header className="sticky top-0 z-10 border-b border-line bg-ink-soft/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-3.5">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-midnight text-white">
-              <TrendingUp className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-midnight">Growth OS</p>
-              {orgName && <p className="text-xs text-slate-deep/70">{orgName}</p>}
-            </div>
+            <KalyceLogo />
+            {orgName && (
+              <span className="ml-3 hidden border-l border-line pl-3 text-xs text-muted md:inline">
+                {orgName}
+              </span>
+            )}
           </div>
           <nav className="flex items-center gap-1">
             <TopNavLink href="/dashboard" icon={LayoutDashboard} label="Tableau de bord" exact />
             <TopNavLink href="/dashboard/roadmap" icon={ListChecks} label="Roadmap" />
             <TopNavLink href="/dashboard/documents" icon={FileText} label="Documents" />
           </nav>
-          <form action={signOut}>
-            <Button type="submit" variant="ghost" size="sm">
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">{profile?.email}</span>
-            </Button>
-          </form>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              className="relative hidden h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface text-textL hover:bg-surface-hover sm:flex"
+              aria-label="Notifications"
+            >
+              <Bell size={14} strokeWidth={1.6} />
+              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-ember" />
+            </button>
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-deep text-xs font-bold text-ink">
+                {initial}
+              </div>
+              <div className="hidden md:block">
+                <div className="text-xs font-semibold text-white">
+                  {profile?.full_name ?? user.email?.split("@")[0]}
+                </div>
+                <div className="text-[10px] text-muted">{orgName}</div>
+              </div>
+            </div>
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface text-textL hover:bg-surface-hover"
+                title="Déconnexion"
+              >
+                <LogOut size={14} strokeWidth={1.6} />
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 
-      <main>{children}</main>
+      <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-7">{children}</main>
     </div>
   );
 }

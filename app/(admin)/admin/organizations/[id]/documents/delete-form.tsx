@@ -3,7 +3,6 @@
 import { useTransition } from "react";
 import { Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { deleteDocument } from "@/app/actions/organizations";
 
 export function DeleteDocumentForm({
@@ -15,10 +14,9 @@ export function DeleteDocumentForm({
 }) {
   const [pending, startTransition] = useTransition();
   return (
-    <Button
-      size="sm"
-      variant="ghost"
+    <button
       disabled={pending}
+      className="flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface text-ember hover:bg-ember/10 disabled:opacity-50 transition-colors"
       onClick={() => {
         if (!confirm("Supprimer ce document ?")) return;
         const fd = new FormData();
@@ -27,7 +25,7 @@ export function DeleteDocumentForm({
         startTransition(() => deleteDocument(fd));
       }}
     >
-      <Trash2 className="h-4 w-4 text-rose-500" />
-    </Button>
+      <Trash2 size={13} strokeWidth={1.6} />
+    </button>
   );
 }

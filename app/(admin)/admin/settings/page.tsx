@@ -1,4 +1,3 @@
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminSettingsPage() {
@@ -12,28 +11,56 @@ export default async function AdminSettingsPage() {
     .eq("id", user!.id)
     .maybeSingle();
 
-  return (
-    <div className="mx-auto max-w-3xl px-8 py-10">
-      <h1 className="mb-6 text-2xl font-semibold text-midnight">Paramètres</h1>
-      <Card>
-        <CardHeader>
-          <CardTitle>Profil consultant</CardTitle>
-        </CardHeader>
-        <dl className="grid gap-3 text-sm">
-          <Row label="Nom" value={profile?.full_name ?? "—"} />
-          <Row label="Email" value={profile?.email ?? ""} />
-          <Row label="Rôle" value={profile?.role ?? ""} />
-        </dl>
-      </Card>
-    </div>
-  );
-}
+  const sections = [
+    {
+      title: "Cabinet",
+      rows: [
+        { label: "Nom du cabinet", value: "Kalyce Consulting" },
+        { label: "Email contact", value: "contact@kalyce-consulting.fr" },
+        { label: "Adresse", value: "Paris, France" },
+      ],
+    },
+    {
+      title: "Profil consultant",
+      rows: [
+        { label: "Nom complet", value: profile?.full_name ?? "—" },
+        { label: "Email", value: profile?.email ?? "—" },
+        { label: "Rôle", value: profile?.role ?? "—" },
+      ],
+    },
+    {
+      title: "Notifications",
+      rows: [
+        { label: "Rapport hebdomadaire", value: "Activé" },
+        { label: "Alertes score client", value: "Si < 50" },
+        { label: "Digest mensuel", value: "Activé" },
+      ],
+    },
+  ];
 
-function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 py-2 last:border-b-0">
-      <dt className="text-slate-deep/70">{label}</dt>
-      <dd className="font-medium text-midnight">{value}</dd>
+    <div className="p-8 max-w-3xl">
+      <h1 className="font-display text-[26px] font-bold text-white mb-1">Paramètres</h1>
+      <p className="text-[13px] text-muted mb-7">Configuration du cabinet et préférences</p>
+
+      <div className="space-y-5">
+        {sections.map((section) => (
+          <div key={section.title} className="rounded-xl border border-line overflow-hidden">
+            <div className="border-b border-line px-5 py-3 text-[11px] font-bold uppercase tracking-[0.07em] text-gold">
+              {section.title}
+            </div>
+            {section.rows.map((row) => (
+              <div
+                key={row.label}
+                className="flex items-center justify-between border-b border-line px-5 py-3.5 last:border-b-0 hover:bg-surface transition-colors"
+              >
+                <span className="text-[13px] text-textL">{row.label}</span>
+                <span className="text-[13px] font-medium text-white">{row.value}</span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

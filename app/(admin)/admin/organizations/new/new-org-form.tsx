@@ -3,7 +3,6 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { Button } from "@/components/ui/button";
 import { Input, Label, Select } from "@/components/ui/input";
 import { createOrganizationWithClient } from "@/app/actions/organizations";
 
@@ -16,9 +15,13 @@ async function submit(_prev: State, formData: FormData): Promise<State> {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending}>
+    <button
+      type="submit"
+      disabled={pending}
+      className="inline-flex items-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-[13px] font-semibold text-ink hover:bg-gold-soft disabled:opacity-50"
+    >
       {pending ? "Création en cours…" : "Créer le client"}
-    </Button>
+    </button>
   );
 }
 
@@ -29,12 +32,12 @@ export function NewOrgForm() {
     <form action={formAction} className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="name">Nom de l'organisation *</Label>
+          <Label htmlFor="name">Nom de l&apos;organisation *</Label>
           <Input id="name" name="name" required />
         </div>
         <div>
           <Label htmlFor="sector">Secteur</Label>
-          <Input id="sector" name="sector" placeholder="Services B2B, retail, ..." />
+          <Input id="sector" name="sector" placeholder="Services B2B, retail…" />
         </div>
         <div>
           <Label htmlFor="current_stage">Stade actuel</Label>
@@ -54,10 +57,10 @@ export function NewOrgForm() {
         </div>
       </section>
 
-      <section className="border-t border-slate-100 pt-6">
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-deep/70">
+      <section className="border-t border-line pt-5">
+        <div className="mb-4 text-[11px] font-semibold uppercase tracking-[0.07em] text-muted">
           Utilisateur client
-        </h2>
+        </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <Label htmlFor="client_email">Email client *</Label>
@@ -71,18 +74,20 @@ export function NewOrgForm() {
       </section>
 
       {state.error && (
-        <p className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-700">{state.error}</p>
+        <p className="rounded-lg border border-ember/40 bg-ember/10 px-3 py-2.5 text-[12px] text-ember">
+          {state.error}
+        </p>
       )}
       {state.info && (
-        <div className="rounded-md bg-emerald-50 px-3 py-3 text-sm text-emerald-800">
-          {state.info}
-          <p className="mt-1 text-xs text-emerald-700/80">
+        <div className="rounded-lg border border-gold/40 bg-gold/10 px-4 py-3 text-[13px] text-gold">
+          <p className="font-semibold">{state.info}</p>
+          <p className="mt-1 text-[11px] text-gold/70">
             Transmettez ce mot de passe au client — il ne sera plus affiché.
           </p>
         </div>
       )}
 
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end">
         <SubmitButton />
       </div>
     </form>

@@ -23,13 +23,13 @@ export function TopNavLink({
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
+        "inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-[13px] transition-colors",
         active
-          ? "bg-midnight/10 text-midnight"
-          : "text-slate-deep/70 hover:bg-slate-100 hover:text-midnight",
+          ? "bg-gold/15 font-semibold text-gold"
+          : "text-muted hover:bg-white/5 hover:text-white",
       )}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="h-4 w-4" strokeWidth={1.6} />
       {label}
     </Link>
   );

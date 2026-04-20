@@ -4,7 +4,6 @@ import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { Upload } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Input, Label, Select } from "@/components/ui/input";
 import { uploadDocument } from "@/app/actions/organizations";
 
@@ -17,10 +16,14 @@ async function submit(_prev: State, formData: FormData): Promise<State> {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" size="sm" disabled={pending}>
-      <Upload className="h-4 w-4" />
+    <button
+      type="submit"
+      disabled={pending}
+      className="inline-flex items-center gap-2 rounded-lg bg-gold px-4 py-2 text-[13px] font-semibold text-ink hover:bg-gold-soft disabled:opacity-50"
+    >
+      <Upload size={13} strokeWidth={1.6} />
       {pending ? "Envoi…" : "Importer"}
-    </Button>
+    </button>
   );
 }
 
@@ -52,10 +55,14 @@ export function UploadForm({ organizationId }: { organizationId: string }) {
         </div>
       </div>
       {state.error && (
-        <p className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-700">{state.error}</p>
+        <p className="rounded-lg border border-ember/40 bg-ember/10 px-3 py-2.5 text-[12px] text-ember">
+          {state.error}
+        </p>
       )}
       {state.info && (
-        <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{state.info}</p>
+        <p className="rounded-lg border border-success/40 bg-success/10 px-3 py-2.5 text-[12px] text-success">
+          {state.info}
+        </p>
       )}
       <div className="flex justify-end">
         <SubmitButton />

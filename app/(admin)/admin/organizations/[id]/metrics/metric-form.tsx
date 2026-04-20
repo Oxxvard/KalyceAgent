@@ -3,7 +3,6 @@
 import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 
-import { Button } from "@/components/ui/button";
 import { Input, Label, Textarea } from "@/components/ui/input";
 import { addGrowthMetric } from "@/app/actions/organizations";
 
@@ -16,9 +15,13 @@ async function submit(_prev: State, formData: FormData): Promise<State> {
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" size="sm" disabled={pending}>
+    <button
+      type="submit"
+      disabled={pending}
+      className="inline-flex items-center gap-2 rounded-lg bg-gold px-4 py-2 text-[13px] font-semibold text-ink hover:bg-gold-soft disabled:opacity-50"
+    >
       {pending ? "Enregistrement…" : "Ajouter la période"}
-    </Button>
+    </button>
   );
 }
 
@@ -70,10 +73,14 @@ export function MetricForm({ organizationId }: { organizationId: string }) {
         <Textarea id="notes" name="notes" />
       </div>
       {state.error && (
-        <p className="rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-700">{state.error}</p>
+        <p className="rounded-lg border border-ember/40 bg-ember/10 px-3 py-2.5 text-[12px] text-ember">
+          {state.error}
+        </p>
       )}
       {state.info && (
-        <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{state.info}</p>
+        <p className="rounded-lg border border-success/40 bg-success/10 px-3 py-2.5 text-[12px] text-success">
+          {state.info}
+        </p>
       )}
       <div className="flex justify-end">
         <SubmitButton />
