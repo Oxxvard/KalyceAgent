@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 
-const allowedOrigins = [];
+const allowedOrigins = ["localhost:3000"];
+const allowedForwardedHosts = ["localhost:3000"];
+
 if (process.env.CODESPACE_NAME) {
-  // GitHub Codespaces: proxy rewrites host → localhost but origin stays *.app.github.dev
-  allowedOrigins.push(
-    `${process.env.CODESPACE_NAME}-3000.app.github.dev`,
-    `${process.env.CODESPACE_NAME}-3000.preview.app.github.dev`,
-  );
+  // GitHub Codespaces sets x-forwarded-host to the codespace URL even when
+  // the browser reaches the dev server via localhost:3000. Whitelist both.
+  const codespaceHost = `${process.env.CODESPACE_NAME}-3000.app.github.dev`;
+  allowedOrigins.push(codespaceHost);
+  allowedForwardedHosts.push(codespaceHost);
 }
 
 const nextConfig = {
@@ -14,6 +16,7 @@ const nextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins,
+      allowedForwardedHosts,
     },
   },
 };
