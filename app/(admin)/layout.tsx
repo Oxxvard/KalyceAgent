@@ -1,17 +1,5 @@
 import { redirect } from "next/navigation";
-import {
-  Bell,
-  ChartBar,
-  ChevronsUpDown,
-  Files,
-  LayoutGrid,
-  LogOut,
-  MapPin,
-  Search,
-  Settings,
-  Sparkles,
-  Users,
-} from "lucide-react";
+import { Bell, ChevronsUpDown, LogOut, Search } from "lucide-react";
 
 import { KalyceLogo } from "@/components/shell/kalyce-logo";
 import { SidebarLink, SidebarSection } from "@/components/shell/sidebar-link";
@@ -60,17 +48,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
         <nav className="flex-1 overflow-y-auto p-3">
           <SidebarSection title="Général">
-            <SidebarLink href="/admin" icon={LayoutGrid} label="Dashboard" exact />
-            <SidebarLink href="/admin/organizations" icon={Users} label="Clients" />
+            <SidebarLink href="/admin" icon="dashboard" label="Dashboard" exact />
+            <SidebarLink href="/admin/organizations" icon="users" label="Clients" />
           </SidebarSection>
           <SidebarSection title="Outils">
-            <SidebarLink href="/admin/audit" icon={Sparkles} label="Audit IA" />
-            <SidebarLink href="/admin/roadmap" icon={MapPin} label="Roadmap" />
-            <SidebarLink href="/admin/documents" icon={Files} label="Documents" />
-            <SidebarLink href="/admin/analytics" icon={ChartBar} label="Analytics" />
+            <SidebarLink href="/admin/audit" icon="sparkles" label="Audit IA" />
+            <SidebarLink href="/admin/roadmap" icon="map" label="Roadmap" />
+            <SidebarLink href="/admin/documents" icon="files" label="Documents" />
+            <SidebarLink href="/admin/analytics" icon="chart" label="Analytics" />
           </SidebarSection>
           <SidebarSection title="Support">
-            <SidebarLink href="/admin/settings" icon={Settings} label="Paramètres" />
+            <SidebarLink href="/admin/settings" icon="settings" label="Paramètres" />
           </SidebarSection>
         </nav>
 

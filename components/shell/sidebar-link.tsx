@@ -2,23 +2,45 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { LucideIcon } from "lucide-react";
+import {
+  ChartBar,
+  Files,
+  LayoutGrid,
+  MapPin,
+  Settings,
+  Sparkles,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+const ICONS: Record<string, LucideIcon> = {
+  dashboard: LayoutGrid,
+  users: Users,
+  sparkles: Sparkles,
+  map: MapPin,
+  files: Files,
+  chart: ChartBar,
+  settings: Settings,
+};
+
+export type SidebarIcon = keyof typeof ICONS;
+
 export function SidebarLink({
   href,
-  icon: Icon,
+  icon,
   label,
   badge,
   exact = false,
 }: {
   href: string;
-  icon: LucideIcon;
+  icon: SidebarIcon;
   label: string;
   badge?: string | number;
   exact?: boolean;
 }) {
+  const Icon = ICONS[icon];
   const pathname = usePathname();
   const active = exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
   return (
