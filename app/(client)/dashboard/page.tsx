@@ -118,22 +118,22 @@ export default async function ClientDashboardPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6">
         <div>
           <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-gold">
             Votre tableau de bord
           </div>
-          <h1 className="font-display text-[28px] font-bold text-white">{org.name}</h1>
-          <p className="mt-1 text-[13px] text-muted">
+          <h1 className="font-display text-[24px] sm:text-[28px] font-bold text-white">{org.name}</h1>
+          <p className="mt-1 text-[12px] sm:text-[13px] text-muted">
             Mission {STAGE_LABEL[org.current_stage] ?? org.current_stage} →{" "}
             {STAGE_LABEL[org.target_stage] ?? org.target_stage} ·{" "}
             {new Date().toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}
           </p>
         </div>
         {consultantProfile?.full_name && (
-          <div className="text-right hidden sm:block">
+          <div className="text-right sm:self-start">
             <div className="text-[11px] text-muted mb-1">Votre consultant</div>
-            <div className="text-[14px] font-semibold text-white">
+            <div className="text-[13px] sm:text-[14px] font-semibold text-white">
               {consultantProfile.full_name}
             </div>
             <div className="text-[11px] text-gold mt-1">Kalyce Consulting</div>
@@ -143,23 +143,23 @@ export default async function ClientDashboardPage() {
 
       {/* Score aura banner */}
       {scoreData && (
-        <div className="flex gap-6 items-center rounded-2xl border border-gold/30 bg-score-aura px-7 py-5">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 rounded-2xl border border-gold/30 bg-score-aura px-4 sm:px-7 py-5">
           <ScoreRing score={total} size={84} />
-          <div>
+          <div className="flex-1">
             <div className="text-[12px] font-semibold uppercase tracking-[0.06em] text-gold">
               Score de croissance global
             </div>
-            <div className="mt-1 text-[22px] font-bold text-white">
+            <div className="mt-1 text-[20px] sm:text-[22px] font-bold text-white">
               {scoreLabel(total)}{" "}
-              <span className="text-[14px] font-normal text-muted">— {total}/100</span>
+              <span className="text-[13px] sm:text-[14px] font-normal text-muted">— {total}/100</span>
             </div>
             <div className="mt-1 text-[12px] text-textL">
               Objectif : 85 · Progression en cours
             </div>
           </div>
-          <div className="ml-auto hidden md:block rounded-xl bg-surface px-5 py-3 text-center">
+          <div className="w-full sm:w-auto rounded-xl bg-surface px-4 sm:px-5 py-3 text-center">
             <div
-              className="text-[28px] font-bold text-gold"
+              className="text-[24px] sm:text-[28px] font-bold text-gold"
               style={{ color: roadmapPct >= 75 ? "#6ee7b7" : undefined }}
             >
               {roadmapPct}%
@@ -170,17 +170,17 @@ export default async function ClientDashboardPage() {
       )}
 
       {/* Dimensions + Revenue */}
-      <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
+      <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
         {scoreData && (
-          <div className="rounded-xl border border-line bg-surface p-5">
-            <div className="mb-4 text-[14px] font-semibold text-white">Scores par dimension</div>
-            <div className="space-y-4">
+          <div className="rounded-xl border border-line bg-surface p-4 sm:p-5">
+            <div className="mb-3 sm:mb-4 text-[13px] sm:text-[14px] font-semibold text-white">Scores par dimension</div>
+            <div className="space-y-3 sm:space-y-4">
               {DIMENSION_LABELS.map(({ key, label, max }) => {
                 const raw = scoreData.result[key as keyof typeof scoreData.result] as number;
                 const pct = Math.round((raw / max) * 100);
                 return (
-                  <div key={key} className="flex items-center gap-3">
-                    <div className="w-36 shrink-0 text-[12px] text-textL">{label}</div>
+                  <div key={key} className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-24 sm:w-32 md:w-28 shrink-0 text-[11px] sm:text-[12px] text-textL">{label}</div>
                     <div
                       className="flex-1 h-1.5 overflow-hidden rounded-full"
                       style={{ background: "rgba(255,255,255,0.08)" }}
@@ -191,7 +191,7 @@ export default async function ClientDashboardPage() {
                       />
                     </div>
                     <div
-                      className="w-10 text-right text-[12px] font-semibold"
+                      className="w-8 sm:w-10 text-right text-[11px] sm:text-[12px] font-semibold"
                       style={{ color: scoreColor(pct) }}
                     >
                       {raw}/{max}
@@ -203,12 +203,12 @@ export default async function ClientDashboardPage() {
           </div>
         )}
 
-        <div className="rounded-xl border border-line bg-surface p-5">
-          <div className="mb-1 text-[14px] font-semibold text-white">Chiffre d&apos;affaires</div>
+        <div className="rounded-xl border border-line bg-surface p-4 sm:p-5">
+          <div className="mb-2 sm:mb-3 text-[13px] sm:text-[14px] font-semibold text-white">Chiffre d&apos;affaires</div>
           {chart.length > 0 ? (
             <RevenueChart data={chart} />
           ) : (
-            <p className="py-16 text-center text-[13px] text-muted">
+            <p className="py-12 sm:py-16 text-center text-[12px] sm:text-[13px] text-muted">
               Les métriques apparaîtront ici dès leur saisie.
             </p>
           )}
