@@ -34,6 +34,7 @@ export default async function OrgDetailLayout({
     { href: `/admin/organizations/${id}/metrics`, label: "Métriques" },
     { href: `/admin/organizations/${id}/roadmap`, label: "Roadmap" },
     { href: `/admin/organizations/${id}/documents`, label: "Documents" },
+    { href: `/admin/organizations/${id}/clients`, label: "Clients" },
   ];
 
   const badgeTone =

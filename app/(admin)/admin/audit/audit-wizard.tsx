@@ -306,9 +306,6 @@ export function AuditWizard({
             >
               ← Modifier les scores
             </button>
-            <button className="rounded-lg bg-gold px-4 py-2.5 text-[13px] font-semibold text-ink hover:bg-gold-soft">
-              ⬇ Exporter PDF
-            </button>
           </div>
         </div>
       )}

@@ -36,20 +36,33 @@ export default async function ClientDashboardPage() {
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "full_name, organization_id, organization:organizations(id, name, current_stage, target_stage)",
+      "full_name, organization_id, organization:organizations(id, name, current_stage, target_stage, consultant_id)",
     )
     .eq("id", user.id)
     .maybeSingle();
 
   const org = profile?.organization as unknown as
-    | { id: string; name: string; current_stage: string; target_stage: string }
+    | {
+        id: string;
+        name: string;
+        current_stage: string;
+        target_stage: string;
+        consultant_id: string | null;
+      }
     | null;
 
   if (!org) {
     return (
-      <div className="py-24 text-center">
-        <p className="text-[14px] text-muted">
-          Votre consultant n&apos;a pas encore associé votre compte à une organisation.
+      <div className="mx-auto max-w-md py-24 text-center">
+        <h1 className="font-display text-[22px] font-semibold text-white">
+          Compte prêt — en attente de rattachement
+        </h1>
+        <p className="mt-3 text-[13px] text-muted">
+          Votre consultant Kalyce n&apos;a pas encore associé votre compte à une
+          organisation. Vous recevrez une notification dès que ce sera fait.
+        </p>
+        <p className="mt-6 text-[11px] text-muted">
+          Contact : <span className="text-gold">contact@kalyce.consulting</span>
         </p>
       </div>
     );
@@ -86,12 +99,13 @@ export default async function ClientDashboardPage() {
     ? Number(metrics.at(-1)!.revenue)
     : null;
 
-  // Find consultant name via org (simplified)
-  const { data: consultantProfile } = await supabase
-    .from("profiles")
-    .select("full_name")
-    .eq("role", "consultant")
-    .maybeSingle();
+  const { data: consultantProfile } = org.consultant_id
+    ? await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", org.consultant_id)
+        .maybeSingle()
+    : { data: null };
 
   return (
     <div className="space-y-6">

@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation";
-import { Bell, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 import { KalyceLogo } from "@/components/shell/kalyce-logo";
+import { NotificationsBell } from "@/components/shell/notifications-bell";
 import { TopNavLink } from "@/components/shell/topnav-link";
 import { signOut } from "@/app/actions/auth";
+import { loadNotifications } from "@/lib/notifications-data";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function ClientLayout({ children }: { children: React.ReactNode }) {
@@ -19,9 +21,14 @@ export default async function ClientLayout({ children }: { children: React.React
     .eq("id", user.id)
     .maybeSingle();
 
+  if (profile?.role !== "client") redirect("/admin");
+
+  const notifications = await loadNotifications(supabase, user.id);
+
   const orgName = (profile?.organization as unknown as { name: string } | null)?.name ?? "";
-  const initial =
-    (profile?.full_name?.trim()?.[0] ?? user.email?.[0] ?? "K").toUpperCase();
+  const displayName =
+    profile?.full_name?.trim() || user.email?.split("@")[0] || "Client";
+  const initial = displayName[0]?.toUpperCase() ?? "K";
 
   return (
     <div className="flex min-h-screen flex-col bg-ink">
@@ -41,22 +48,13 @@ export default async function ClientLayout({ children }: { children: React.React
             <TopNavLink href="/dashboard/documents" icon="documents" label="Documents" />
           </nav>
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              className="relative hidden h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface text-textL hover:bg-surface-hover sm:flex"
-              aria-label="Notifications"
-            >
-              <Bell size={14} strokeWidth={1.6} />
-              <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-ember" />
-            </button>
+            <NotificationsBell initial={notifications} />
             <div className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-deep text-xs font-bold text-ink">
                 {initial}
               </div>
               <div className="hidden md:block">
-                <div className="text-xs font-semibold text-white">
-                  {profile?.full_name ?? user.email?.split("@")[0]}
-                </div>
+                <div className="text-xs font-semibold text-white">{displayName}</div>
                 <div className="text-[10px] text-muted">{orgName}</div>
               </div>
             </div>
