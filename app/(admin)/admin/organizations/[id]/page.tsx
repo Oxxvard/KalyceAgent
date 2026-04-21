@@ -87,27 +87,27 @@ export default async function OrgOverviewPage({
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {/* Top: score + revenue */}
-      <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
-        <div className="rounded-xl border border-line bg-surface p-5">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-[12px] font-semibold text-muted uppercase tracking-[0.06em]">
+      <div className="grid gap-4 sm:gap-5 md:grid-cols-[300px_1fr] lg:grid-cols-[320px_1fr]">
+        <div className="rounded-xl border border-line bg-surface p-4 sm:p-5">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span className="text-[11px] sm:text-[12px] font-semibold text-muted uppercase tracking-[0.06em]">
               Scalability Score
             </span>
             <RecomputeButton orgId={id} />
           </div>
           <ScoreGauge score={total} />
-          <div className="mt-5 space-y-3">
+          <div className="mt-4 sm:mt-5 space-y-2 sm:space-y-3">
             <ScoreLine label="Financier" value={scoreData.result.financial} max={40} />
             <ScoreLine label="Opérationnel" value={scoreData.result.operational} max={30} />
             <ScoreLine label="Maturité" value={scoreData.result.maturity} max={30} />
           </div>
         </div>
 
-        <div className="rounded-xl border border-line bg-surface p-5">
-          <div className="mb-1 flex items-center justify-between">
-            <span className="text-[13px] font-semibold text-white">
+        <div className="rounded-xl border border-line bg-surface p-4 sm:p-5">
+          <div className="mb-2 sm:mb-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
+            <span className="text-[12px] sm:text-[13px] font-semibold text-white">
               Chiffre d&apos;affaires
             </span>
             <Badge tone="muted">{metrics?.length ?? 0} périodes</Badge>
@@ -115,7 +115,7 @@ export default async function OrgOverviewPage({
           {chart.length > 0 ? (
             <RevenueChart data={chart} />
           ) : (
-            <p className="py-16 text-center text-[13px] text-muted">
+            <p className="py-12 sm:py-16 text-center text-[12px] sm:text-[13px] text-muted">
               Aucune métrique saisie.
             </p>
           )}
@@ -123,11 +123,11 @@ export default async function OrgOverviewPage({
       </div>
 
       {/* KPI row */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-2 sm:gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((k) => (
           <div
             key={k.label}
-            className="rounded-xl border border-line bg-surface px-5 py-4"
+            className="rounded-xl border border-line bg-surface px-3 sm:px-5 py-3 sm:py-4"
           >
             <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted">
               {k.label}
