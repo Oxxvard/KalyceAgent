@@ -39,11 +39,15 @@ export async function updateSession(request: NextRequest): Promise<SessionContex
     return { response, user: null, role: null };
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("role")
     .eq("id", user.id)
     .maybeSingle();
+
+  if (profileError) {
+    console.error(`[Middleware] Erreur fetching profile pour ${user.id}:`, profileError);
+  }
 
   return {
     response,

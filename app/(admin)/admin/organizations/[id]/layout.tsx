@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { TabsNav } from "@/components/shell/tabs";
+import { DeleteOrganizationDialog } from "@/components/shell/delete-organization-dialog";
 import { createClient } from "@/lib/supabase/server";
 
 const STAGE_LABEL: Record<string, string> = {
@@ -58,14 +59,20 @@ export default async function OrgDetailLayout({
             {org.sector ?? "PME"}
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-display text-[28px] font-bold text-white">{org.name}</h1>
-          <Badge tone={badgeTone as "gold" | "ember" | "muted"}>
-            {STAGE_LABEL[org.current_stage] ?? org.current_stage}
-          </Badge>
-          <span className="text-[12px] text-muted">
-            → {STAGE_LABEL[org.target_stage] ?? org.target_stage}
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-display text-[28px] font-bold text-white">{org.name}</h1>
+            <Badge tone={badgeTone as "gold" | "ember" | "muted"}>
+              {STAGE_LABEL[org.current_stage] ?? org.current_stage}
+            </Badge>
+            <span className="text-[12px] text-muted">
+              → {STAGE_LABEL[org.target_stage] ?? org.target_stage}
+            </span>
+          </div>
+          <DeleteOrganizationDialog
+            orgId={org.id}
+            orgName={org.name}
+          />
         </div>
       </header>
       <TabsNav tabs={tabs} />

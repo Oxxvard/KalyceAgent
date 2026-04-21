@@ -57,7 +57,8 @@ export async function createOrganizationWithClient(formData: FormData): Promise<
   }
 
   const admin = createAdminClient();
-  const tempPassword = generatePassword();
+  const customPassword = String(formData.get("password") ?? "").trim();
+  const tempPassword = customPassword || generatePassword();
   const { data: created, error: userError } = await admin.auth.admin.createUser({
     email: clientEmail,
     password: tempPassword,
@@ -277,13 +278,24 @@ export async function inviteClientToOrganization(
       .eq("id", existing.id);
     if (linkError) return { error: linkError.message };
 
+    // Génère un mot de passe personnalisé ou aléatoire
+    const customPassword = String(formData.get("password") ?? "").trim();
+    const newPassword = customPassword || generatePassword();
+    const { error: updateError } = await admin.auth.admin.updateUserById(existing.id, {
+      password: newPassword,
+    });
+    if (updateError) return { error: `Rattachement OK mais erreur MDP : ${updateError.message}` };
+
     revalidatePath(`/admin/organizations/${orgId}`);
     revalidatePath(`/admin/organizations/${orgId}/clients`);
-    return { info: `${email} rattaché à ${orgRow.name}.` };
+    return {
+      info: `${email} rattaché à ${orgRow.name}. Nouveau mot de passe : ${newPassword}`,
+    };
   }
 
-  // Nouveau compte : crée l'utilisateur avec mot de passe temporaire.
-  const tempPassword = generatePassword();
+  // Nouveau compte : crée l'utilisateur avec mot de passe personnalisé ou généré.
+  const customPassword = String(formData.get("password") ?? "").trim();
+  const tempPassword = customPassword || generatePassword();
   const { data: created, error: userError } = await admin.auth.admin.createUser({
     email,
     password: tempPassword,
@@ -323,4 +335,44 @@ export async function detachClientFromOrganization(
 
   revalidatePath(`/admin/organizations/${orgId}/clients`);
   revalidatePath(`/admin/organizations/${orgId}`);
+}
+
+export async function deleteOrganization(orgId: string): Promise<ActionResult> {
+  const supabase = await createClient();
+  const {
+    data: { user: consultant },
+  } = await supabase.auth.getUser();
+  if (!consultant) return { error: "Session expirée." };
+
+  // Vérifier que l'org appartient au consultant
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id, name, consultant_id")
+    .eq("id", orgId)
+    .maybeSingle();
+
+  if (!org) return { error: "Organisation introuvable." };
+  if (org.consultant_id !== consultant.id) {
+    return { error: "Vous n'avez pas accès à cette organisation." };
+  }
+
+  const admin = createAdminClient();
+
+  // Supprimer l'organisation (cascade delete sur les tables enfant)
+  const { error: deleteError } = await admin
+    .from("organizations")
+    .delete()
+    .eq("id", orgId);
+
+  if (deleteError) return { error: `Erreur suppression : ${deleteError.message}` };
+
+  // Détacher les clients
+  await admin
+    .from("profiles")
+    .update({ organization_id: null })
+    .eq("organization_id", orgId);
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/organizations");
+  return { info: `${org.name} supprimée avec succès.` };
 }

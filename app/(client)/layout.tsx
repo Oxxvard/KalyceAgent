@@ -17,15 +17,22 @@ export default async function ClientLayout({ children }: { children: React.React
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, full_name, email, organization:organizations(name)")
+    .select("role, full_name, email, organization_id")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.role !== "client") redirect("/admin");
+  let orgName = "";
+  if (profile?.organization_id) {
+    const { data: org } = await supabase
+      .from("organizations")
+      .select("name")
+      .eq("id", profile.organization_id)
+      .maybeSingle();
+    orgName = org?.name ?? "";
+  }
 
   const notifications = await loadNotifications(supabase, user.id);
 
-  const orgName = (profile?.organization as unknown as { name: string } | null)?.name ?? "";
   const displayName =
     profile?.full_name?.trim() || user.email?.split("@")[0] || "Client";
   const initial = displayName[0]?.toUpperCase() ?? "K";

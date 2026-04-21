@@ -45,6 +45,15 @@ export function InviteClientForm({ organizationId }: { organizationId: string })
           <Label htmlFor="client_name">Nom complet</Label>
           <Input id="client_name" name="client_name" placeholder="Jean Dupont" />
         </div>
+        <div>
+          <Label htmlFor="password">Mot de passe (optionnel)</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Laisser vide pour génération automatique"
+          />
+        </div>
       </div>
       {state.error && (
         <p className="rounded-lg border border-ember/40 bg-ember/10 px-3 py-2 text-[12px] text-ember">

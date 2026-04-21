@@ -23,6 +23,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirect);
   }
 
+  // Si l'user existe mais pas de role trouvé, rediriger à login
+  if (!role) {
+    console.warn(`[MW] User ${user.id} missing role, redirecting to login`);
+    const redirect = request.nextUrl.clone();
+    redirect.pathname = "/login";
+    redirect.searchParams.set("next", pathname);
+    return NextResponse.redirect(redirect);
+  }
+
   const home = role === "consultant" ? "/admin" : "/dashboard";
 
   if (pathname === "/" || pathname === "/login") {

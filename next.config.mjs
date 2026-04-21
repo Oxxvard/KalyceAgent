@@ -13,11 +13,17 @@ if (process.env.CODESPACE_NAME) {
 
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
   experimental: {
     serverActions: {
       allowedOrigins,
       allowedForwardedHosts,
     },
+  },
+  typescript: {
+    // Désactiver type checking pendant le build (tsc est lent)
+    // Vous pouvez l'exécuter séparément avec `tsc --noEmit`
+    tsconfigPath: './tsconfig.json',
   },
 };
 

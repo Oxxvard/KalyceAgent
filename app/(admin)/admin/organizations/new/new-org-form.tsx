@@ -70,6 +70,15 @@ export function NewOrgForm() {
             <Label htmlFor="client_name">Nom complet</Label>
             <Input id="client_name" name="client_name" />
           </div>
+          <div>
+            <Label htmlFor="password">Mot de passe (optionnel)</Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Laisser vide pour génération automatique"
+            />
+          </div>
         </div>
       </section>
 

@@ -21,8 +21,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.role !== "consultant") redirect("/dashboard");
-
   const notifications = await loadNotifications(supabase, user.id);
 
   const displayName =

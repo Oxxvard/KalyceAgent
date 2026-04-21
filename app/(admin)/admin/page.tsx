@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { KpiCard } from "@/components/ui/kpi-card";
 import { ScoreRing, scoreColor, scoreLabel } from "@/components/ui/score-ring";
 import { ProgressBar } from "@/components/ui/progress";
+import { DeleteOrganizationDialog } from "@/components/shell/delete-organization-dialog";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminOverviewPage() {
@@ -177,12 +178,18 @@ export default async function AdminOverviewPage() {
                     </div>
                   </td>
                   <td className="px-5 py-3">
-                    <Link
-                      href={`/admin/organizations/${org.id}`}
-                      className="text-muted hover:text-gold"
-                    >
-                      <ArrowRight size={15} strokeWidth={1.6} />
-                    </Link>
+                    <div className="flex items-center justify-end gap-2">
+                      <DeleteOrganizationDialog
+                        orgId={org.id}
+                        orgName={org.name}
+                      />
+                      <Link
+                        href={`/admin/organizations/${org.id}`}
+                        className="text-muted hover:text-gold"
+                      >
+                        <ArrowRight size={15} strokeWidth={1.6} />
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               );

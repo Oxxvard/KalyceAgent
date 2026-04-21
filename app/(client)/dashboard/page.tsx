@@ -35,23 +35,11 @@ export default async function ClientDashboardPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select(
-      "full_name, organization_id, organization:organizations(id, name, current_stage, target_stage, consultant_id)",
-    )
+    .select("full_name, organization_id")
     .eq("id", user.id)
     .maybeSingle();
 
-  const org = profile?.organization as unknown as
-    | {
-        id: string;
-        name: string;
-        current_stage: string;
-        target_stage: string;
-        consultant_id: string | null;
-      }
-    | null;
-
-  if (!org) {
+  if (!profile?.organization_id) {
     return (
       <div className="mx-auto max-w-md py-24 text-center">
         <h1 className="font-display text-[22px] font-semibold text-white">
@@ -63,6 +51,26 @@ export default async function ClientDashboardPage() {
         </p>
         <p className="mt-6 text-[11px] text-muted">
           Contact : <span className="text-gold">contact@kalyce.consulting</span>
+        </p>
+      </div>
+    );
+  }
+
+  // Charger l'organisation avec une requête séparée
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id, name, current_stage, target_stage, consultant_id")
+    .eq("id", profile.organization_id)
+    .maybeSingle();
+
+  if (!org) {
+    return (
+      <div className="mx-auto max-w-md py-24 text-center">
+        <h1 className="font-display text-[22px] font-semibold text-white">
+          Erreur
+        </h1>
+        <p className="mt-3 text-[13px] text-muted">
+          Organisation introuvable.
         </p>
       </div>
     );

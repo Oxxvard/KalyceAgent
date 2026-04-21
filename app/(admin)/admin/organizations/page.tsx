@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgressBar } from "@/components/ui/progress";
 import { ScoreRing, scoreColor } from "@/components/ui/score-ring";
+import { DeleteOrganizationDialog } from "@/components/shell/delete-organization-dialog";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function OrganizationsListPage() {
@@ -62,35 +63,46 @@ export default async function OrganizationsListPage() {
               : "muted";
 
           return (
-            <Link
+            <div
               key={org.id}
-              href={`/admin/organizations/${org.id}`}
               className="group flex items-center gap-4 rounded-xl border border-line bg-surface px-5 py-4 transition-all hover:border-gold/30 hover:bg-surface-hover"
             >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-[13px] font-semibold text-white">{org.name}</span>
-                  <Badge tone={badgeTone as "gold" | "ember" | "muted"}>
-                    {STAGE_LABEL[org.current_stage] ?? org.current_stage}
-                  </Badge>
-                </div>
-                <div className="text-[11px] text-muted">{org.sector ?? "—"}</div>
-              </div>
-
-              <div className="flex items-center gap-6 shrink-0">
-                <div className="hidden sm:block text-right">
-                  <div className="text-[10px] text-muted mb-1">Roadmap</div>
-                  <div className="flex items-center gap-2">
-                    <ProgressBar value={pct} thickness="sm" className="w-20" />
-                    <span className="text-[11px] text-muted">{pct}%</span>
+              <Link
+                href={`/admin/organizations/${org.id}`}
+                className="flex-1 min-w-0 flex items-center gap-4 cursor-pointer"
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="text-[13px] font-semibold text-white">{org.name}</span>
+                    <Badge tone={badgeTone as "gold" | "ember" | "muted"}>
+                      {STAGE_LABEL[org.current_stage] ?? org.current_stage}
+                    </Badge>
                   </div>
+                  <div className="text-[11px] text-muted">{org.sector ?? "—"}</div>
                 </div>
-                <div className="flex flex-col items-center gap-1">
-                  <ScoreRing score={score} size={48} />
+
+                <div className="flex items-center gap-6 shrink-0">
+                  <div className="hidden sm:block text-right">
+                    <div className="text-[10px] text-muted mb-1">Roadmap</div>
+                    <div className="flex items-center gap-2">
+                      <ProgressBar value={pct} thickness="sm" className="w-20" />
+                      <span className="text-[11px] text-muted">{pct}%</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <ScoreRing score={score} size={48} />
+                  </div>
+                  <ArrowRight size={15} className="text-muted group-hover:text-gold transition-colors" />
                 </div>
-                <ArrowRight size={15} className="text-muted group-hover:text-gold transition-colors" />
+              </Link>
+
+              <div className="flex items-center gap-2">
+                <DeleteOrganizationDialog
+                  orgId={org.id}
+                  orgName={org.name}
+                />
               </div>
-            </Link>
+            </div>
           );
         })}
         {!orgs?.length && (
