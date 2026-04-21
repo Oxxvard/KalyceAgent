@@ -2,23 +2,37 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { LucideIcon } from "lucide-react";
+import {
+  FileText,
+  LayoutDashboard,
+  ListChecks,
+  type LucideIcon,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+const ICONS: Record<string, LucideIcon> = {
+  dashboard: LayoutDashboard,
+  roadmap: ListChecks,
+  documents: FileText,
+};
+
+export type TopNavIcon = keyof typeof ICONS;
+
 export function TopNavLink({
   href,
-  icon: Icon,
+  icon,
   label,
   exact = false,
 }: {
   href: string;
-  icon: LucideIcon;
+  icon: TopNavIcon;
   label: string;
   exact?: boolean;
 }) {
   const pathname = usePathname();
   const active = exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+  const Icon = ICONS[icon];
   return (
     <Link
       href={href}

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { Bell, FileText, LayoutDashboard, ListChecks, LogOut } from "lucide-react";
+import { Bell, LogOut } from "lucide-react";
 
 import { KalyceLogo } from "@/components/shell/kalyce-logo";
 import { TopNavLink } from "@/components/shell/topnav-link";
@@ -38,9 +38,9 @@ export default async function ClientLayout({ children }: { children: React.React
             )}
           </div>
           <nav className="flex items-center gap-1">
-            <TopNavLink href="/dashboard" icon={LayoutDashboard} label="Tableau de bord" exact />
-            <TopNavLink href="/dashboard/roadmap" icon={ListChecks} label="Roadmap" />
-            <TopNavLink href="/dashboard/documents" icon={FileText} label="Documents" />
+            <TopNavLink href="/dashboard" icon="dashboard" label="Tableau de bord" exact />
+            <TopNavLink href="/dashboard/roadmap" icon="roadmap" label="Roadmap" />
+            <TopNavLink href="/dashboard/documents" icon="documents" label="Documents" />
           </nav>
           <div className="flex items-center gap-3">
             <button
