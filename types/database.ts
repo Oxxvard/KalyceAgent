@@ -15,6 +15,13 @@ export type DocumentCategory =
   | "marketing"
   | "operations"
   | "other";
+export type NotificationType =
+  | "document_uploaded"
+  | "metric_added"
+  | "checklist_done"
+  | "checklist_in_progress"
+  | "client_invited"
+  | "organization_created";
 
 type ProfilesRow = {
   id: string;
@@ -89,6 +96,18 @@ type ScalabilityScoresRow = {
   score: number;
   breakdown: Json;
   computed_at: string;
+};
+
+type NotificationsRow = {
+  id: string;
+  recipient_id: string;
+  organization_id: string | null;
+  type: NotificationType;
+  title: string;
+  body: string | null;
+  url: string | null;
+  read_at: string | null;
+  created_at: string;
 };
 
 export type Database = {
@@ -200,6 +219,22 @@ export type Database = {
         Update: Partial<ScalabilityScoresRow>;
         Relationships: [];
       };
+      notifications: {
+        Row: NotificationsRow;
+        Insert: {
+          id?: string;
+          recipient_id: string;
+          organization_id?: string | null;
+          type: NotificationType;
+          title: string;
+          body?: string | null;
+          url?: string | null;
+          read_at?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<NotificationsRow>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -217,6 +252,7 @@ export type Database = {
       org_stage: OrgStage;
       checklist_status: ChecklistStatus;
       document_category: DocumentCategory;
+      notification_type: NotificationType;
     };
     CompositeTypes: Record<string, never>;
   };

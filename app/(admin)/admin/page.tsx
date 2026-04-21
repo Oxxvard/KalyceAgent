@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  CheckCircle2,
-  RefreshCw,
-  TrendingUp,
-  Users,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, TrendingUp, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { KpiCard } from "@/components/ui/kpi-card";
@@ -76,40 +70,25 @@ export default async function AdminOverviewPage() {
             Vue d&apos;ensemble du portefeuille — {new Date().toLocaleDateString("fr-FR", { month: "long", year: "numeric" })}
           </p>
         </div>
-        <div className="flex gap-2">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-line bg-surface px-3.5 py-2 text-[12px] text-textL hover:bg-surface-hover">
-            <RefreshCw size={13} strokeWidth={1.6} /> Exporter
-          </button>
-          <Link
-            href="/admin/organizations/new"
-            className="inline-flex items-center gap-2 rounded-lg bg-gold px-4 py-2 text-[12px] font-semibold text-ink hover:bg-gold-soft"
-          >
-            + Nouveau client
-          </Link>
-        </div>
+        <Link
+          href="/admin/organizations/new"
+          className="inline-flex items-center gap-2 rounded-lg bg-gold px-4 py-2 text-[12px] font-semibold text-ink hover:bg-gold-soft"
+        >
+          + Nouveau client
+        </Link>
       </div>
 
       {/* KPI row */}
       <div className="mb-6 flex gap-3 flex-wrap">
         <KpiCard
-          label="MRR Total"
-          value={`€${totalMrr > 0 ? (totalMrr / 1000).toFixed(0) : "—"}k`}
-          delta="+12% vs M-1"
-          deltaUp
+          label="CA cumulé (dernier snapshot)"
+          value={totalMrr > 0 ? `€${(totalMrr / 1000).toFixed(0)}k` : "—"}
           icon={TrendingUp}
         />
-        <KpiCard
-          label="Clients actifs"
-          value={activeCount}
-          delta="+1 ce mois"
-          deltaUp
-          icon={Users}
-        />
+        <KpiCard label="Clients actifs" value={activeCount} icon={Users} />
         <KpiCard
           label="Score moyen"
-          value={`${avgScore}/100`}
-          delta="+3 pts"
-          deltaUp
+          value={avgScore > 0 ? `${avgScore}/100` : "—"}
           icon={TrendingUp}
         />
         <KpiCard

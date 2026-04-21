@@ -2,12 +2,7 @@ import { KpiCard } from "@/components/ui/kpi-card";
 import { ScoreRing, scoreColor } from "@/components/ui/score-ring";
 import { ProgressBar } from "@/components/ui/progress";
 import { createClient } from "@/lib/supabase/server";
-import {
-  BarChart2,
-  CheckCircle2,
-  Star,
-  TrendingUp,
-} from "lucide-react";
+import { BarChart2, CheckCircle2, TrendingUp, Users } from "lucide-react";
 
 export default async function AnalyticsPage() {
   const supabase = await createClient();
@@ -89,27 +84,21 @@ export default async function AnalyticsPage() {
       <div className="flex gap-3 flex-wrap">
         <KpiCard
           label="Score moyen portefeuille"
-          value={`${avgScore}/100`}
-          delta="+3pts vs T-1"
-          deltaUp
+          value={avgScore > 0 ? `${avgScore}/100` : "—"}
           icon={BarChart2}
         />
         <KpiCard
-          label="Revenus mensuels"
+          label="CA cumulé (dernier mois)"
           value={totalMrr > 0 ? `€${totalMrr}k` : "—"}
-          delta="+12%"
-          deltaUp
           icon={TrendingUp}
         />
         <KpiCard
-          label="NPS Kalyce"
-          value="72"
-          delta="Excellent"
-          deltaUp
-          icon={Star}
+          label="Clients accompagnés"
+          value={orgs?.length ?? 0}
+          icon={Users}
         />
         <KpiCard
-          label="Missions clôturées (ytd)"
+          label="Scores ≥ 80"
           value={scoreValues.filter((s) => s >= 80).length}
           icon={CheckCircle2}
         />
