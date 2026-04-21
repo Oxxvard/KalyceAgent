@@ -19,8 +19,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.role !== "consultant") redirect("/dashboard");
-
   const initial =
     (profile?.full_name?.trim()?.[0] ?? user.email?.[0] ?? "K").toUpperCase();
 

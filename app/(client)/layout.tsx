@@ -19,8 +19,6 @@ export default async function ClientLayout({ children }: { children: React.React
     .eq("id", user.id)
     .maybeSingle();
 
-  if (profile?.role !== "client") redirect("/admin");
-
   const orgName = (profile?.organization as unknown as { name: string } | null)?.name ?? "";
   const initial =
     (profile?.full_name?.trim()?.[0] ?? user.email?.[0] ?? "K").toUpperCase();
